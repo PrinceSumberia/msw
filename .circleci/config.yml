@@ -86,6 +86,15 @@ jobs:
           name: Running integration tests
           command: yarn test:integration
 
+  test-smoke:
+    <<: *env-browser
+    steps:
+      - attach_workspace: *workspace
+      - restore_cache: *deps-cache
+      - run:
+          name: Running smoke tests
+          command: yarn test:smoke
+
 workflows:
   version: 2
   release:
@@ -100,5 +109,8 @@ workflows:
             - bootstrap
 
       - test-integration:
+          requires:
+            - build
+      - test-smoke:
           requires:
             - build
